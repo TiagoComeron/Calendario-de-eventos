@@ -48,7 +48,7 @@
       timeout='3000'
       class="mt-8"
     >
-      {{ text }}
+      <div class="pa-2">{{ text }}</div>
     </v-snackbar>
     <router-view/>
   </v-app>
@@ -56,17 +56,17 @@
 
 <script>
 
+import axios from './axios';
+axios.defaults.baseURL = 'http://localhost:8080';
 
 export default {
   name: 'App',
 
-  components: {
-  },
 
   data: () => ({
     snackbar: false,
     text: '',
-    multiline:true,
+    multiLine:true,
     corSnackbar: '',
   }),
   methods: {
@@ -75,6 +75,56 @@ export default {
       this.corSnackbar = cor;
       this.snackbar = true;
     },
+    post(url, body, redirect, message, messageText, cor){
+      return axios.post(url, body, {headers: {'authorization': this.$cookies.get('authorization')}})
+      .then(response => {
+          if(redirect)
+            this.$router.push('/'+redirect)
+          if(message)
+            this.exibirMensagem((messageText?messageText:response.data.message), cor)
+        if(response.headers.authorization)
+          this.$cookies.set('authorization', response.headers.authorization)
+      })
+      .catch(e => {
+          if(e.response.status == 403){
+            this.$cookies.set('authorization','')
+              if(this.$router.currentRoute.path != '/login'){
+                this.exibirMensagem(e.response.data.message, 'error')
+                this.$router.push('/login')
+              }
+          }
+          if(e.response.status == 400){
+            this.exibirMensagem(e.response.data.message, 'error')
+          }
+      })
+    },
+    get(url, redirect, message, messageText, cor){
+      axios.get(url, {headers: {'authorization': this.$cookies.get('authorization')}})
+      .then(response => {
+          if(redirect)
+            this.$router.push('/'+redirect)
+          if(message)
+            this.exibirMensagem((messageText?messageText:response.data.message), cor)
+        if(response.headers.authorization)
+          this.$cookies.set('authorization', response.headers.authorization)
+
+      })
+      .catch(e => {
+          if(e.response.status == 403){
+            this.$cookies.set('authorization','')
+              if(this.$router.currentRoute.path != '/login'){
+                this.exibirMensagem(e.response.data.message, 'error')
+                this.$router.push('/login')
+              }
+          }
+          if(e.response.status == 400){
+            this.exibirMensagem(e.response.data.message, 'error')
+          }
+      })
+    }
+  },
+  created() {
+    this.get('/calendar/user/profile')
   },
 };
 </script>

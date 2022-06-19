@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyparser=require('body-parser');
 const cookieParser=require('cookie-parser');
@@ -30,8 +31,18 @@ const app = express();
 app.use(bodyparser.urlencoded({extended : false}));
 app.use(bodyparser.json());
 app.use(cookieParser());
-app.use('/calendar', routes)
+// blocking cors errors:
+// app.use(cors({
+//   origin: "http://localhost:4000",
+//   credentials: true,            //access-control-allow-credentials:true
+//   optionSuccessStatus: 200,
+// }))
+app.use(cors({
+  origin: 'http://localhost:4000',
+  exposedHeaders: 'authorization',
+}))
 
-app.listen(3000, () => {
-  console.log(`Server Started at ${3000}`)
+app.use('/calendar', routes)
+app.listen(8080, () => {
+  console.log(`Server Started at ${8080}`)
 })

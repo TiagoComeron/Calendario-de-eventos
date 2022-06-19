@@ -119,13 +119,13 @@ router.post('/login', function(req,res){
 })
 
 router.get('/user/profile',authLogin,function(req,res){
-        res.json({
-            isAuth: true,
-            id: req.user._id,
-            username: req.user.username,
-            name: req.user.first_name +" "+ req.user.last_name
-            
-        })
+    res.json({
+        isAuth: true,
+        id: req.user._id,
+        username: req.user.username,
+        name: req.user.first_name +" "+ req.user.last_name
+        
+    })
 });
 
 router.get('/logout',authLogin,function(req,res){
