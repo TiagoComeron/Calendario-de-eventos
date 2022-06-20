@@ -25,7 +25,8 @@
 
 - [x]  Cadastro de usuário
 - [x]  Login para acesso ao sistema
-- [x]  CRUD de eventos
+- [ ]  CRUD de eventos
+ - Ficou faltando apenas a exclusão que irá ficar no card onde aparecem os detalhes do evento 
 
 ---
 
