@@ -2,6 +2,7 @@ const Event = require('../../models/eventModel/eventModel');
 
 exports.createEvent = function (req, res) {
     const newEvent = new Event({
+        name:   req.body.name,
         description:   req.body.description,
         event_begin:   req.body.event_begin,
         event_end: req.body.event_end,
@@ -9,20 +10,20 @@ exports.createEvent = function (req, res) {
         guests: req.body.guests,
     })
 
-        newEvent.save().then( dataEvent =>{
-            const User = require('../../models/userModel/userModel');
-            User.findOne({_id:req.user._id}, function (err,dataUser) {
-                if(!dataUser) return
-                dataUser.events.push(dataEvent._id)
-                dataUser.save()
-            })  
-        })
-        res.status(200).send('Evento '+ newEvent.description +' criado!')
+    newEvent.save().then( dataEvent =>{
+        const User = require('../../models/userModel/userModel');
+        User.findOne({_id:req.user._id}, function (err,dataUser) {
+            if(!dataUser) return
+            dataUser.events.push(dataEvent._id)
+            dataUser.save()
+        })  
+    })
+    res.status(200).send('Evento '+ newEvent.name +' criado!')
 
 }
 
-exports.findAllEvents = async function (res) {
-    const events = await Event.find();
+exports.findAllEvents = async function (res, user_id) {
+    const events = await Event.find({user_owner:user_id});
     res.json(events)
 }
 
@@ -37,6 +38,7 @@ exports.updateEvent = async function (req, res) {
     const options = { new: true };
     
     const result = await Event.findByIdAndUpdate(id, {
+        name: updatedEvent.name, 
         description: updatedEvent.description, 
         event_begin: updatedEvent.event_begin,
         event_end: updatedEvent.event_end,
@@ -60,7 +62,7 @@ exports.deleteEvent = async function (req, res) {
 
 
             const eventDeleted = await Event.findByIdAndDelete(id)
-            res.send('Evento ' + eventDeleted.description + ' foi deletado com sucesso..')
+            res.send('Evento ' + eventDeleted.name + ' foi deletado com sucesso..')
             return
         }catch (error) {
             return res.json({ error :error.message });

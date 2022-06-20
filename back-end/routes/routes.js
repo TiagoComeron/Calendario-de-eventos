@@ -4,7 +4,6 @@ const UserController = require('../controllers/userController/userController');
 const EventController = require('../controllers/eventController/eventController');
 
 const {authLogin,authPermissionUser,authPermissionEvent} = require('../middlewares/auth');
-
 const router = express.Router()
 
 router.get('/user/findAll', async (req, res) => {
@@ -53,9 +52,9 @@ router.post('/event/create',authLogin, async (req, res) => {
     }
 })
 
-router.get('/event/findAll', async (req, res) => {
+router.get('/event/findAll',authLogin, async (req, res) => {
     try{
-        EventController.findAllEvents(res)
+        EventController.findAllEvents(res, req.user._id)
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -123,8 +122,10 @@ router.get('/user/profile',authLogin,function(req,res){
         isAuth: true,
         id: req.user._id,
         username: req.user.username,
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        birth_date: req.user.birth_date,
         name: req.user.first_name +" "+ req.user.last_name
-        
     })
 });
 

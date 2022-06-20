@@ -10,7 +10,11 @@
                         :rules="rulesUsername"
                         hide-details="auto"
                         ></v-text-field>
-                        <v-text-field v-model="password" :rules="rulesPassword" label="Senha"></v-text-field>
+                        <v-text-field v-model="password" 
+                        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                        :type="show ? 'text' : 'password'"
+                        @click:append="show = !show"
+                        :rules="rulesPassword" label="Senha"></v-text-field>
                 </v-col>
                 </v-row>
                 <v-row>
@@ -38,7 +42,7 @@
                     @click:outside="dialog = false"
                     >
                     <v-card class="pa-10" elevation="2">
-                        <Register :rulesPassword="rulesPassword" :rulesUsername="rulesUsername" :dialog="dialog" @closeDialog="dialog = false"/>
+                        <Register :dialog="dialog" @closeDialog="dialog = false"/>
                     </v-card>
                     </v-dialog>
                 </v-col>
@@ -61,6 +65,8 @@ export default {
     data: () => ({
         username: '',
         password: '',
+        dialog: false,
+        show: false,
         rulesUsername: [
             value => !!value || 'Required.',
         ],
@@ -68,7 +74,6 @@ export default {
             value => !!value || 'Required.',
             value => (value && value.length >= 8) || 'Min 8 characters',
         ],
-        dialog: false
     }),
     methods: {
         login() {
@@ -79,9 +84,6 @@ export default {
                 password: this.password
             }
             this.$root.$children[0].post(`/calendar/login`, body, 'home', true, null, 'success')
-        },
-        register() {
-            this.panel = [0]
         },
     },
 }

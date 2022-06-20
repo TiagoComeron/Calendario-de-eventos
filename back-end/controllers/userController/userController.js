@@ -81,13 +81,13 @@ exports.loginUser = function (req, res){
         else{
             User.findOne({'username':req.body.username},function(err,user){
                 if(!user) return res.status(400).json({isAuth : false, message : ' Usuário não encontrado'});
-                console.log("user");
                 user.comparepassword(req.body.password,(err,isMatch)=>{
                     if(!isMatch) return res.status(400).json({ isAuth : false , message : "Senha incorreta"});
         
                 user.generateToken((err,user)=>{
                     if(err) return res.status(400).send(err);
                     res.setHeader('authorization',user.token)
+                    res.setHeader('user_id',user._id)
                     res.json({
                         isAuth : true,
                         id : user._id

@@ -31,16 +31,28 @@ const app = express();
 app.use(bodyparser.urlencoded({extended : false}));
 app.use(bodyparser.json());
 app.use(cookieParser());
+// var options = {
+//   "origin": "http://localhost:4000",
+//   "exposedHeaders": "authorization",
+//   "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+//   "preflightContinue": false,
+//   "optionsSuccessStatus": 204
+// }
 // blocking cors errors:
 // app.use(cors({
 //   origin: "http://localhost:4000",
 //   credentials: true,            //access-control-allow-credentials:true
 //   optionSuccessStatus: 200,
 // }))
-app.use(cors({
-  origin: 'http://localhost:4000',
-  exposedHeaders: 'authorization',
-}))
+// app.use(cors(options))
+var options = {
+  "origin": "*",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "exposedHeaders": ["authorization", "user_id"],
+  "preflightContinue": false,
+  "optionsSuccessStatus": 204
+}
+app.use(cors(options));
 
 app.use('/calendar', routes)
 app.listen(8080, () => {

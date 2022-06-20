@@ -3,7 +3,6 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import router from './router'
 import cookies from 'vue-cookies'
-// import axios from 'axios';
 
 Vue.config.productionTip = false
 

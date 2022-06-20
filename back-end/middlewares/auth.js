@@ -15,10 +15,12 @@ let authLogin = (req,res,next)=>{
 }
 
 let authPermissionUser = (req,res,next)=>{
+    let token = req.headers.authorization;
     try{
         User.findById(req.params.id,(error,user)=>{
             if(error) return res.json({ error :error.message });
             if(!user) return res.json({ error :true });
+            res.setHeader('authorization',token)
             if(user.id != req.user._id) return res.json({ error :true, message: 'Usuário logado não tem permissão para esta ação', type:'permission' });
             next();
         })
@@ -29,10 +31,13 @@ let authPermissionUser = (req,res,next)=>{
 }
 
 let authPermissionEvent = (req,res,next)=>{
+    let token = req.headers.authorization;
+    let userId = req.headers.user_id
     Event.findById(req.params.id,(error,event)=>{
-        if(error) return res.json({ error :error.message });
-        if(!event) return res.json({ error :true });
-        if(event.user_owner != req.user._id) return res.json({ error :true, message: 'Usuário logado não tem permissão para esta ação', type:'permission' });
+        if(error) return res.status(404).json({ error :error.message });
+        if(!event) return res.status(404).json({ error :true });
+        res.setHeader('authorization',token)
+        if(event.user_owner != userId) return res.status(403).json({ error :true, message: 'Usuário logado não tem permissão para esta ação', type:'permission' });
         next();
     })
 }
