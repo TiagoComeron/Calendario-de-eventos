@@ -3,6 +3,11 @@
   <h2>{{this.new?'Criar Evento':''}}</h2>
   <v-form v-if="this.editing || this.new" class="px-5" ref="formRegister" @submit.prevent="editar" lazy-validation>
     <v-container>
+      
+        <v-col>
+          <v-row>
+          </v-row>
+        </v-col>
       <v-row>
         <v-col cols="12" class="mr-5">
           <v-row>
@@ -53,7 +58,7 @@
               locale="pt-BR"
               :active-picker.sync="activePicker"
               :max="
-                new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                new Date(Date.now() + Date.now())
                   .toISOString()
                   .substr(0, 10)
               "
@@ -88,7 +93,7 @@
               locale="pt-BR"
               :active-picker.sync="activePicker"
               :max="
-                new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                new Date(Date.now() + Date.now())
                   .toISOString()
                   .substr(0, 10)
               "
