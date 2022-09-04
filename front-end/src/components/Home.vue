@@ -68,10 +68,7 @@
               locale="pt-BR"
               :events="events"
               :event-color="getEventColor"
-              :type="month"
               @click:event="showEvent"
-              @click:more="viewDay"
-              @click:date="viewDay"
               @change="updateRange"
             >
               <template v-slot:event="{ event }">
@@ -128,7 +125,6 @@ export default {
     dialogEvent: false,
     dialogUser: false,
     focus: "",
-    type: "month",
     typeToLabel: {
       month: "Mês",
       week: "Semana",
@@ -183,10 +179,6 @@ export default {
         "Retornando a tela de login.",
         "success"
       );
-    },
-    viewDay({ date }) {
-      this.focus = date;
-      this.type = "day";
     },
     getEventColor(event) {
       return event.color;
