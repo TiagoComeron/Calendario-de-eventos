@@ -202,7 +202,7 @@ export default {
       this.dateFormattedEnd = this.formatDate(val);
     },
     selectedOpen(){
-      console.log(this.selectedEvent);
+      // console.log(this.selectedEvent);
       this.id = this.selectedEvent.id,
       this.name = this.selectedEvent.name,
       this.description = this.selectedEvent.description

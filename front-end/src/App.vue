@@ -121,6 +121,34 @@ export default {
           }
       })
     },
+    delete(url, body, redirect, message, messageText, cor){
+      return axios.delete(url, {headers: {
+        'authorization': this.$cookies.get('authorization'),
+        'user_id': this.$cookies.get('user_id'),
+        }}).then(response => {
+          if(redirect)
+            this.$router.push('/'+redirect)
+          if(message)
+            this.exibirMensagem((messageText?messageText:response.data.message), cor)
+        if(response.headers.authorization)
+          this.$cookies.set('authorization', response.headers.authorization)
+      })
+      .catch(e => {
+          if(e.response.status == 403){
+            if(e.response.data.type == 'permission')
+              this.exibirMensagem(e.response.data.message, 'error')
+            else{
+              if(this.$router.currentRoute.path != '/login'){
+                this.exibirMensagem(e.response.data.message, 'error')
+                this.$router.push('/login')
+              }
+            }
+          }
+          if(e.response.status == 400){
+            this.exibirMensagem(e.response.data.message, 'error')
+          }
+      })
+    }
   },
   created() {
     if(this.$router.currentRoute.path != '/login'){

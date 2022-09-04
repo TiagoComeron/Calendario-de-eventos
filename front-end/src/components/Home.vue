@@ -11,7 +11,7 @@
               @click:outside="dialogUser = false,editingUser = false"
               >
               <v-card class="pa-10" elevation="2">
-                  <Register :user="user" :editing="editingUser" :dialog="dialogUser" @closeDialog="dialogUser = false, editingUser = false"/>
+                  <register :user="user" :editing="editingUser" :dialog="dialogUser" @closeDialog="dialogUser = false, editingUser = false"/>
               </v-card>
               </v-dialog>
           </v-col>
@@ -118,18 +118,18 @@
                   <v-btn @click="editing = !editing" icon>
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
-                  <v-toolbar-title
-                    v-html="selectedEvent.title"
-                  ></v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-btn icon>
-                    <v-icon>mdi-dots-vertical</v-icon>
+                    <v-icon @click="delRecord(selectedEvent)" >mdi-trash-can</v-icon>
                   </v-btn>
                 </v-toolbar>
-                <v-card-text>
-                  <span v-html="selectedEvent.details"></span>
-                </v-card-text>
-                <event :selectedOpen="selectedOpen" :selectedEvent="selectedEvent" :editing="editing" @reloadCalendar="updateRange({})" @closeShow="selectedOpen=false"/>
+                <event 
+                  :selectedOpen="selectedOpen" 
+                  :selectedEvent="selectedEvent" 
+                  :editing="editing" 
+                  @reloadCalendar="updateRange({})" 
+                  @closeShow="selectedOpen=false;"
+                />
               </v-card>
             </v-menu>
           </v-sheet>
@@ -176,6 +176,27 @@ export default {
     this.setUser()
   },
   methods: {
+    async delRecord(event) {
+		console.log(event);
+		const body = {
+			id: event.id
+		};
+
+		this.$root.$children[0]
+        .delete(
+          `/calendar/event/delete/`+body.id,
+          body,
+          false,
+          true,
+          "Evento deletado com sucesso.",
+          "success"
+        )
+        .then(() => {
+          this.updateRange({});
+          this.selectedOpen=false
+        });
+
+	},
     async setUser(){
       const response = await this.$root.$children[0].get(false,`/calendar/user/profile`)
       this.user = response.data
