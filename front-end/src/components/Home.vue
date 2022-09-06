@@ -135,7 +135,7 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     events: [],
-    colors: ["#293462", "#F24C4C", "#EC9B3B", "#FFE5B4", "#371B58", "#1363DF"],
+    colors: ["#293462", "#F24C4C", "#EC9B3B", "#755B29", "#371B58", "#1363DF"],
     items: [{ title: "Sair" }],
     editing: false,
     editingUser: true

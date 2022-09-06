@@ -7,8 +7,7 @@
 - [x]  Cadastro de usuário
 - [x]  Login para acesso ao sistema
 - [x]  Validação de campos
-- [ ]  CRUD de eventos
- - Ficou faltando apenas a exclusão que irá ficar no card onde aparecem os detalhes do evento 
+- [x]  CRUD de eventos
 - [x]  Banco de dados não-relacional
 - [x]  Suporte a vários usuários
 - [x]  Eventos ligados ao usuário que os criou
@@ -27,10 +26,11 @@
 
 ---
 
-## Principais depêndencias:
+## Principais ferramentas:
 
 - [x]  axios
 - [x]  core-js
 - [x]  vue-cookies
 - [x]  vue-router
 - [x]  Vuetify
+- [x]  Mongoose
